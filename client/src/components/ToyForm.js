@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 function ToyForm({ onAddToy }) {
+  const [errors , setErrors] = useState([])
   const [formData, setFormData] = useState({
     name: "",
     image: "",
@@ -34,7 +35,10 @@ function ToyForm({ onAddToy }) {
           name: "",
           image: "",
         });
-        onAddToy(newToy);
+        console.log(newToy)
+        if(newToy.error) {
+          setErrors(newToy.error)
+        } else { onAddToy(newToy);}
       });
   }
 
@@ -66,6 +70,7 @@ function ToyForm({ onAddToy }) {
           value="Create New Toy"
           className="submit"
         />
+        {errors?.length > 0 ? errors.map(e => <h1 key={e}>{e}</h1>): null }
       </form>
     </div>
   );

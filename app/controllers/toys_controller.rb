@@ -1,5 +1,6 @@
 class ToysController < ApplicationController
   wrap_parameters format: []
+  rescue_from ActiveRecord::RecordInvalid , with: :render_unprocessable_entity
 
   def index
     toys = Toy.all
@@ -20,7 +21,7 @@ class ToysController < ApplicationController
   def destroy
     toy = Toy.find_by(id: params[:id])
     toy.destroy
-    head :no_content
+    render json: {} , status: :no_content
   end
 
   private
@@ -30,6 +31,6 @@ class ToysController < ApplicationController
   end
 
   def render_unprocessable_entity(invalid)
-    render json: {error: invalid.record.error.full_messages} , status: :unprocessable_entity
+    render json: {error: invalid.record.errors.full_messages} , status: :unprocessable_entity
   end 
 end
